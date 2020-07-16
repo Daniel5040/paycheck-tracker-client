@@ -1,17 +1,39 @@
 <template>
-  <div>
-    <label>Name</label>
-    <input v-model="name" required />
-    <label>Email</label>
-    <input type="email" v-model="email" required />
-    <label>Password</label>
-    <input type="password" v-model="password" required />
-    <label>Confirm Password</label>
-    <input type="password" v-model="repeat_password" required />
-    <label>Hourly Wage</label>
-    <input v-model="wage" required />
-    <button @click="submitForm">Submit</button>
-    <div v-show="error">{{ error }}</div>
+  <div class="container">
+    <input
+      class="input"
+      type="text"
+      v-model="name"
+      placeholder="Name"
+      required
+    />
+    <input
+      class="input"
+      type="email"
+      v-model="email"
+      placeholder="E-mail"
+      required
+    />
+    <input
+      class="input"
+      type="password"
+      v-model="password"
+      placeholder="Password"
+      required
+    />
+    <input
+      class="input"
+      type="text"
+      v-model="wage"
+      placeholder="Wage"
+      required
+    />
+    <transition name="down" mode="out-in">
+      <span class="error" v-show="error">{{ error }}</span>
+    </transition>
+    <button @click="submitForm">Sign Up</button>
+    <span>Already have an account?</span>
+    <span class="swap" @click="$emit('swap')">Login</span>
   </div>
 </template>
 
@@ -25,7 +47,6 @@ export default {
       name: '',
       email: '',
       password: '',
-      repeat_password: '',
       wage: '',
       error: ''
     }
@@ -68,4 +89,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+  margin-top: 20%;
+}
+</style>

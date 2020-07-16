@@ -1,11 +1,25 @@
 <template>
-  <div>
-    <label>Email</label>
-    <input type="email" v-model="email" required />
-    <label>Password</label>
-    <input type="password" v-model="password" required />
-    <button @click="submitForm">Submit</button>
-    <div v-show="error">{{ error }}</div>
+  <div class="container">
+    <input
+      class="input"
+      type="email"
+      v-model="email"
+      placeholder="E-mail"
+      required
+    />
+    <input
+      class="input"
+      type="password"
+      v-model="password"
+      placeholder="Password"
+      required
+    />
+    <transition name="down" mode="out-in">
+      <span class="error" v-show="error">{{ error }}</span>
+    </transition>
+    <button @click="submitForm">Login</button>
+    <span>Don't have an account?</span>
+    <span class="swap" @click="$emit('swap')">Sign up</span>
   </div>
 </template>
 
@@ -49,4 +63,4 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>
