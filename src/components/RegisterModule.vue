@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <form @submit.prevent class="container">
     <input
       class="input"
       type="text"
@@ -29,16 +29,16 @@
       required
     />
     <transition name="down" mode="out-in">
-      <span class="error" v-show="error">{{ error }}</span>
+      <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
     </transition>
     <button @click="submitForm">Sign Up</button>
     <span>Already have an account?</span>
     <span class="swap" @click="$emit('swap')">Login</span>
-  </div>
+  </form>
 </template>
 
 <script>
-import { UserService } from '@/service'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Register',
@@ -47,35 +47,24 @@ export default {
       name: '',
       email: '',
       password: '',
-      wage: '',
-      error: ''
+      wage: ''
     }
   },
   methods: {
+    ...mapActions(['register', 'clearError']),
     async submitForm() {
-      const submitData = {
+      const user = {
         name: this.name,
         email: this.email,
         password: this.password,
-        wage: +this.wage
+        wage: this.wage ? +this.wage : null
       }
-
-      try {
-        const registerRes = await UserService.register(submitData)
-        const registerData = registerRes.data
-
-        const loginRes = await UserService.login({
-          email: registerData.email,
-          password: registerData.password
-        })
-        const loginData = loginRes.data
-
-        localStorage.setItem('user-token', loginData.data.token)
-        localStorage.setItem('user-email', this.email)
-        this.$router.push('/')
-      } catch (error) {
-        this.error = error.response.data.error
-        setTimeout(() => (this.error = ''), 4000)
+      await this.register(user)
+      if (!this.errorMessage) {
+        this.clearForm()
+        this.$router.push({ name: 'Home' })
+      } else {
+        setTimeout(() => this.clearError(), 4000)
       }
     },
     clearForm() {
@@ -85,12 +74,9 @@ export default {
       this.repeat_password = ''
       this.wage = ''
     }
-  }
+  },
+  computed: mapGetters(['errorMessage'])
 }
 </script>
 
-<style scoped>
-.container {
-  margin-top: 20%;
-}
-</style>
+<style scoped></style>

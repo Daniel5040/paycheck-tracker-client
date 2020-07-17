@@ -6,9 +6,12 @@
       :to="link.link"
       class="nav-link"
       @click.native="active = link.id"
-      v-bind:class="{ 'active-link': checkActive(link.id) }"
     >
-      <span class="material-icons md-40 nav-icon">{{ link.name }}</span>
+      <span
+        class="material-icons md-40 nav-icon"
+        v-bind:class="{ 'active-link': checkActive(link.id) }"
+        >{{ link.name }}</span
+      >
     </router-link>
   </nav>
 </template>
@@ -24,13 +27,16 @@ export default {
         { id: 3, name: 'add_circle', link: { name: 'CreatePaycheck' } },
         { id: 4, name: 'settings', link: { name: 'Settings' } }
       ],
-      active: ''
+      active: 0
     }
   },
   methods: {
     checkActive(link) {
       return this.active === link ? true : false
     }
+  },
+  beforeMount() {
+    this.active = 0
   }
 }
 </script>
@@ -58,7 +64,7 @@ export default {
     -webkit-tap-highlight-color: transparent;
     transition: background 0.1s ease-in-out;
 
-    &:hover {
+    span:hover {
       color: $secondary-color;
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <form @submit.prevent class="container">
     <input
       class="input"
       type="email"
@@ -15,51 +15,46 @@
       required
     />
     <transition name="down" mode="out-in">
-      <span class="error" v-show="error">{{ error }}</span>
+      <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
     </transition>
     <button @click="submitForm">Login</button>
     <span>Don't have an account?</span>
     <span class="swap" @click="$emit('swap')">Sign up</span>
-  </div>
+  </form>
 </template>
 
 <script>
-import { UserService } from '@/service'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
   data() {
     return {
       email: '',
-      password: '',
-      error: ''
+      password: ''
     }
   },
   methods: {
+    ...mapActions(['login', 'clearError']),
     async submitForm() {
-      const submitData = {
+      const user = {
         email: this.email,
         password: this.password
       }
-
-      try {
-        const res = await UserService.login(submitData)
-        const data = res.data
-
-        localStorage.setItem('user-token', data.data.token)
-        localStorage.setItem('user-email', this.email)
+      await this.login(user)
+      if (!this.errorMessage) {
         this.clearForm()
-        this.$router.push('/')
-      } catch (error) {
-        this.error = error.response.data.error
-        setTimeout(() => (this.error = ''), 4000)
+        this.$router.push({ name: 'Home' })
+      } else {
+        setTimeout(() => this.clearError(), 4000)
       }
     },
     clearForm() {
       this.email = ''
       this.password = ''
     }
-  }
+  },
+  computed: mapGetters(['errorMessage'])
 }
 </script>
 

@@ -1,23 +1,22 @@
 <template>
   <div id="app">
-    <NavBar v-show="loggedIn" />
-    <router-view />
+    <NavBar v-show="isLoggedIn" />
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
   components: {
     NavBar
   },
-  data() {
-    return {
-      loggedIn: false
-    }
-  }
+  computed: mapGetters(['isLoggedIn'])
 }
 </script>
 
@@ -35,6 +34,8 @@ export default {
 }
 
 h1,
+h2,
+h4,
 p,
 input,
 button,
@@ -68,7 +69,7 @@ button {
 .container {
   display: flex;
   flex-direction: column;
-  margin: 0 10%;
+  margin: 0 8%;
 }
 
 .input {
@@ -127,7 +128,7 @@ button {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease-out;
+  transition: opacity 0.2s ease-out;
 }
 
 .fade-leave-to {

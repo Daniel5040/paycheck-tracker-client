@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store/index'
 
 Vue.use(VueRouter)
 
@@ -7,7 +8,11 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/Home.vue')
+    component: () => import('@/views/Home.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters.isLoggedIn) next({ name: 'Login' })
+      else next()
+    }
   },
   {
     path: '/login',
@@ -17,17 +22,29 @@ const routes = [
   {
     path: '/paycheck/create',
     name: 'CreatePaycheck',
-    component: () => import('@/views/CreatePaycheck.vue')
+    component: () => import('@/views/CreatePaycheck.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters.isLoggedIn) next({ name: 'Login' })
+      else next()
+    }
   },
   {
     path: '/paychecks',
     name: 'Paychecks',
-    component: () => import('@/views/Paychecks.vue')
+    component: () => import('@/views/Paychecks.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters.isLoggedIn) next({ name: 'Login' })
+      else next()
+    }
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: () => import('@/views/Settings.vue')
+    component: () => import('@/views/Settings.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters.isLoggedIn) next({ name: 'Login' })
+      else next()
+    }
   }
 ]
 
