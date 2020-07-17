@@ -75,11 +75,9 @@ const actions = {
   },
 
   // Update info
-  async updateInfo({ commit }, id, user) {
+  async updateInfo({ commit }, { id, data }) {
     try {
-      const res = await axios.put(`${url}/update/info/${id}`, user)
-      const data = res.data.data
-      localStorage.setItem('email', user.email)
+      await axios.put(`${url}/update/info/${id}`, data)
       commit('update_info', data)
     } catch (error) {
       commit('auth_error', error.response.data.error)
@@ -87,9 +85,9 @@ const actions = {
   },
 
   // Update password
-  async updatePassword({ commit }, id, password) {
+  async updatePassword({ commit }, { id, password }) {
     try {
-      await axios.put(`${url}/update/password/${id}`, password)
+      await axios.put(`${url}/update/password/${id}`, { password })
     } catch (error) {
       commit('auth_error', error.response.data.error)
     }

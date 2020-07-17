@@ -1,57 +1,76 @@
 <template>
-  <div class="container-modal">
+  <form @submit.prevent class="container-modal">
     <h2>Update Information</h2>
     <input
       class="input"
       type="text"
-      v-model="name"
+      v-model="user.name"
       placeholder="Name"
       required
     />
     <input
       class="input"
       type="text"
-      v-model="email"
-      placeholder="E-mail"
+      v-model="user.wage"
+      placeholder="Wage"
       required
     />
     <input
       class="input"
-      type="text"
-      v-model="wage"
-      placeholder="Wage"
-      required
+      type="password"
+      v-model="password"
+      placeholder="Password"
     />
     <transition name="down" mode="out-in">
       <span class="error" v-show="error">{{ error }}</span>
     </transition>
+    <transition name="down" mode="out-in">
+      <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    </transition>
     <button @click="submitForm">Update Info</button>
-  </div>
+  </form>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'ModalUpdateInfo',
   data() {
     return {
-      name: '',
-      email: '',
-      wage: '',
+      user: {},
+      password: '',
       error: ''
     }
   },
   methods: {
+    ...mapActions(['updateInfo', 'getUserInfo']),
     submitForm() {
-      console.log('update info')
-      this.$emit('closeModal')
+      if (this.password.length) {
+        const data = {
+          name: this.user.name,
+          wage: this.user.wage,
+          password: this.password
+        }
+        this.updateInfo({ id: this.user.id, data })
+        this.$emit('closeModal')
+      } else {
+        this.error = 'Password required'
+        setTimeout(() => (this.error = ''), 4000)
+      }
+    }
+  },
+  computed: mapGetters(['errorMessage', 'userInfo']),
+  async beforeMount() {
+    try {
+      const email = localStorage.getItem('email')
+      await this.getUserInfo(email)
+      this.user = this.userInfo
+    } catch (error) {
+      console.log(error)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.container-modal {
-  margin: 0;
-  padding: 30px 50px;
-}
-</style>
+<style lang="scss" scoped></style>

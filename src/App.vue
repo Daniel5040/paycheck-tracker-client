@@ -56,6 +56,7 @@ button {
   cursor: pointer;
   transition: all 0.3s ease 0s;
   margin: 10px 0;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     background-color: lighten($secondary-color, 10%);
@@ -70,6 +71,13 @@ button {
   display: flex;
   flex-direction: column;
   margin: 0 8%;
+}
+
+.container-modal {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 50px;
+  width: 75%;
 }
 
 .input {

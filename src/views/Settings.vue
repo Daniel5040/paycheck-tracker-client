@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Hi, {{ userInfo.name }}!</h1>
+    <h1 class="title">Hi, {{ user.name }}!</h1>
     <span class="text"
       >Here's where you can manage the details of your Account.</span
     >
@@ -26,12 +26,14 @@
       class="modal"
       v-if="showPassword"
       @closeModal="allFalse"
+      :id="user.id"
     />
-    <ModalUpdateInfo class="modal" v-if="showUpdate" @closeModal="allFalse" />
+    <ModalUpdateInfo class="modal" v-if="showUpdate" @closeModal="updateInfo" />
     <ModalDeleteAccount
       class="modal"
       v-if="showDelete"
       @closeModal="allFalse"
+      :id="user.id"
     />
   </div>
 </template>
@@ -75,6 +77,7 @@ export default {
           text: 'Get outta here'
         }
       ],
+      user: {},
       showModal: false,
       showPassword: false,
       showUpdate: false,
@@ -82,22 +85,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout', 'getUserInfo', 'deleteAccount']),
+    ...mapActions(['logout', 'getUserInfo']),
     click(index) {
       this.showModal = true
 
       switch (index) {
         case 0:
           this.showPassword = true
-          console.log('password')
           break
         case 1:
           this.showUpdate = true
-          console.log('personal info')
           break
         case 2:
           this.showDelete = true
-          console.log('delete account')
           break
         case 3:
           this.logout()
@@ -109,12 +109,24 @@ export default {
       this.showPassword = false
       this.showUpdate = false
       this.showDelete = false
+    },
+    updateInfo() {
+      this.allFalse()
+      this.getInfo()
+    },
+    async getInfo() {
+      try {
+        const email = localStorage.getItem('email')
+        await this.getUserInfo(email)
+        this.user = this.userInfo
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   computed: mapGetters(['userInfo']),
-  created() {
-    const email = localStorage.getItem('email')
-    this.getUserInfo(email)
+  async beforeMount() {
+    await this.getInfo()
   }
 }
 </script>
@@ -170,7 +182,7 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 99;
   background: $primary-color;
-  border: 1px solid $accent-color;
+  border: 1px solid darken($accent-color, 10%);
   border-radius: 16px;
 }
 </style>

@@ -1,15 +1,15 @@
 <template>
   <nav class="nav">
     <router-link
-      v-for="link in links"
-      :key="link.id"
+      v-for="(link, index) in links"
+      :key="index"
       :to="link.link"
       class="nav-link"
-      @click.native="active = link.id"
+      @click.native="active = index"
     >
       <span
         class="material-icons md-40 nav-icon"
-        v-bind:class="{ 'active-link': checkActive(link.id) }"
+        v-bind:class="{ 'active-link': checkActive(index) }"
         >{{ link.name }}</span
       >
     </router-link>
@@ -22,21 +22,18 @@ export default {
   data() {
     return {
       links: [
-        { id: 1, name: 'home', link: { name: 'Home' } },
-        { id: 2, name: 'format_list_bulleted', link: { name: 'Paychecks' } },
-        { id: 3, name: 'add_circle', link: { name: 'CreatePaycheck' } },
-        { id: 4, name: 'settings', link: { name: 'Settings' } }
+        { name: 'home', link: { name: 'Home' } },
+        { name: 'format_list_bulleted', link: { name: 'Paychecks' } },
+        { name: 'add_circle', link: { name: 'CreatePaycheck' } },
+        { name: 'settings', link: { name: 'Settings' } }
       ],
-      active: 0
+      active: -1
     }
   },
   methods: {
-    checkActive(link) {
-      return this.active === link ? true : false
+    checkActive(index) {
+      return this.active === index ? true : false
     }
-  },
-  beforeMount() {
-    this.active = 0
   }
 }
 </script>
@@ -64,8 +61,10 @@ export default {
     -webkit-tap-highlight-color: transparent;
     transition: background 0.1s ease-in-out;
 
-    span:hover {
-      color: $secondary-color;
+    &:hover {
+      span {
+        color: $secondary-color;
+      }
     }
   }
 }

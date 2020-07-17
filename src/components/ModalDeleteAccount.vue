@@ -1,8 +1,8 @@
 <template>
-  <div class="container-modal">
-    <h2>Delete Account</h2>
+  <form @submit.prevent class="container-modal">
+    <h2 class="title">Delete Account</h2>
     <span class="text">Are you sure?</span>
-    <span class="text">There is no coming back from this</span>
+    <span class="text">There is no coming back from this.</span>
     <input
       class="input"
       type="text"
@@ -13,13 +13,19 @@
     <transition name="down" mode="out-in">
       <span class="error" v-show="error">{{ error }}</span>
     </transition>
+    <transition name="down" mode="out-in">
+      <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    </transition>
     <button @click="submitForm">Delete Account</button>
-  </div>
+  </form>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'ModalDeleteAccount',
+  props: ['id'],
   data() {
     return {
       email: '',
@@ -27,21 +33,27 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['deleteAccount']),
     submitForm() {
-      console.log('delete account')
-      this.$emit('closeModal')
+      if (this.email === localStorage.getItem('email')) {
+        this.deleteAccount(this.id)
+        this.$emit('closeModal')
+      } else {
+        this.error = 'Incorrect email'
+        setTimeout(() => (this.error = ''), 4000)
+      }
     }
-  }
+  },
+  computed: mapGetters(['errorMessage'])
 }
 </script>
 
 <style lang="scss" scoped>
-.container-modal {
-  margin: 0;
-  padding: 30px 50px;
+.title {
+  margin-bottom: 10px;
+}
 
-  .text {
-    font-size: 13px;
-  }
+.text {
+  font-size: 14px;
 }
 </style>
