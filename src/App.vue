@@ -9,14 +9,19 @@
 
 <script>
 import NavBar from '@/components/NavBar'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'App',
   components: {
     NavBar
   },
-  computed: mapGetters(['isLoggedIn'])
+  methods: mapActions(['getUserInfo']),
+  computed: mapGetters(['isLoggedIn']),
+  created() {
+    const email = localStorage.getItem('email')
+    if (this.isLoggedIn) this.getUserInfo(email)
+  }
 }
 </script>
 
@@ -49,6 +54,7 @@ body {
 }
 
 button {
+  font-size: 0.85rem;
   padding: 15px 25px;
   background-color: $secondary-color;
   border: none;
@@ -81,6 +87,7 @@ button {
 }
 
 .input {
+  font-size: 0.9rem;
   background: transparent;
   border: none;
   border-bottom: 1px solid darken($accent-color, 30%);
@@ -120,7 +127,7 @@ button {
 
 .down-enter-to,
 .down-leave {
-  max-height: 100px;
+  max-height: 100%;
   overflow: hidden;
 }
 

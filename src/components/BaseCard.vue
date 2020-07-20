@@ -16,6 +16,7 @@ export default {
 .card-container {
   margin: 10px auto;
   border: 1px solid darken($accent-color, 20%);
+  border-radius: 16px;
   width: 150px;
   height: 140px;
   display: flex;

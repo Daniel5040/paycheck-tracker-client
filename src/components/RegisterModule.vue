@@ -51,7 +51,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['register', 'clearError']),
+    ...mapActions(['register', 'clearError', 'getUserInfo']),
     async submitForm() {
       const user = {
         name: this.name,
@@ -62,6 +62,7 @@ export default {
       await this.register(user)
       if (!this.errorMessage) {
         this.clearForm()
+        this.getUserInfo(user.email)
         this.$router.push({ name: 'Home' })
       } else {
         setTimeout(() => this.clearError(), 4000)

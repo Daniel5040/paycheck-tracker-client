@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Hi, {{ user.name }}!</h1>
+    <h1 class="title">Hi, {{ userInfo.name }}!</h1>
     <span class="text"
       >Here's where you can manage the details of your Account.</span
     >
@@ -18,40 +18,21 @@
           <span class="text">{{ slot.text }}</span>
         </template>
       </BaseCard>
+      <ModalOverlay @closeModal="closeModal" :modal="modal" />
     </div>
-    <transition name="fade" mode="out-in">
-      <div class="modal-overlay" v-if="showModal" @click="allFalse"></div>
-    </transition>
-    <ModalUpdatePassword
-      class="modal"
-      v-if="showPassword"
-      @closeModal="allFalse"
-      :id="user.id"
-    />
-    <ModalUpdateInfo class="modal" v-if="showUpdate" @closeModal="updateInfo" />
-    <ModalDeleteAccount
-      class="modal"
-      v-if="showDelete"
-      @closeModal="allFalse"
-      :id="user.id"
-    />
   </div>
 </template>
 
 <script>
 import BaseCard from '@/components/BaseCard'
-import ModalUpdatePassword from '@/components/ModalUpdatePassword'
-import ModalUpdateInfo from '@/components/ModalUpdateInfo'
-import ModalDeleteAccount from '@/components/ModalDeleteAccount'
+import ModalOverlay from '@/components/ModalOverlay'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Settings',
   components: {
     BaseCard,
-    ModalUpdatePassword,
-    ModalUpdateInfo,
-    ModalDeleteAccount
+    ModalOverlay
   },
   data() {
     return {
@@ -77,66 +58,52 @@ export default {
           text: 'Get outta here'
         }
       ],
-      user: {},
-      showModal: false,
-      showPassword: false,
-      showUpdate: false,
-      showDelete: false
+      modal: {
+        showModal: false,
+        showPassword: false,
+        showUpdate: false,
+        showDelete: false
+      }
     }
   },
   methods: {
-    ...mapActions(['logout', 'getUserInfo']),
+    ...mapActions(['logout']),
     click(index) {
-      this.showModal = true
+      this.modal.showModal = true
 
       switch (index) {
         case 0:
-          this.showPassword = true
+          this.modal.showPassword = true
           break
         case 1:
-          this.showUpdate = true
+          this.modal.showUpdate = true
           break
         case 2:
-          this.showDelete = true
+          this.modal.showDelete = true
           break
         case 3:
           this.logout()
           break
+        default:
+          break
       }
     },
-    allFalse() {
-      this.showModal = false
-      this.showPassword = false
-      this.showUpdate = false
-      this.showDelete = false
-    },
-    updateInfo() {
-      this.allFalse()
-      this.getInfo()
-    },
-    async getInfo() {
-      try {
-        const email = localStorage.getItem('email')
-        await this.getUserInfo(email)
-        this.user = this.userInfo
-      } catch (error) {
-        console.log(error)
+    closeModal() {
+      for (const key in this.modal) {
+        this.modal[key] = false
       }
     }
   },
-  computed: mapGetters(['userInfo']),
-  async beforeMount() {
-    await this.getInfo()
-  }
+  computed: mapGetters(['userInfo'])
 }
 </script>
 
 <style lang="scss" scoped>
 .container {
-  margin-top: 18%;
+  margin-top: 100px;
 
   .title {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .text {
@@ -144,7 +111,7 @@ export default {
   }
 
   .cards {
-    margin-top: 25%;
+    margin-top: 100px;
     display: flex;
     flex-wrap: wrap;
 
@@ -163,26 +130,5 @@ export default {
 .material-icons.md-40 {
   font-size: 40px;
   color: $secondary-color;
-}
-
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 98;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 99;
-  background: $primary-color;
-  border: 1px solid darken($accent-color, 10%);
-  border-radius: 16px;
 }
 </style>

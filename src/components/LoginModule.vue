@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent class="container">
+  <form @submit.prevent class="container login">
     <input
       class="input"
       type="email"
@@ -35,7 +35,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['login', 'clearError']),
+    ...mapActions(['login', 'clearError', 'getUserInfo']),
     async submitForm() {
       const user = {
         email: this.email,
@@ -44,6 +44,7 @@ export default {
       await this.login(user)
       if (!this.errorMessage) {
         this.clearForm()
+        this.getUserInfo(user.email)
         this.$router.push({ name: 'Home' })
       } else {
         setTimeout(() => this.clearError(), 4000)
@@ -58,4 +59,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.login {
+  margin-top: 150px !important;
+}
+</style>

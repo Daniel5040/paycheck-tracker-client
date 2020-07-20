@@ -44,9 +44,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateInfo', 'getUserInfo']),
+    ...mapActions(['updateInfo']),
     submitForm() {
-      if (this.password.length) {
+      if (this.password.length > 3) {
         const data = {
           name: this.user.name,
           wage: this.user.wage,
@@ -61,14 +61,8 @@ export default {
     }
   },
   computed: mapGetters(['errorMessage', 'userInfo']),
-  async beforeMount() {
-    try {
-      const email = localStorage.getItem('email')
-      await this.getUserInfo(email)
-      this.user = this.userInfo
-    } catch (error) {
-      console.log(error)
-    }
+  beforeMount() {
+    this.user = this.userInfo
   }
 }
 </script>
