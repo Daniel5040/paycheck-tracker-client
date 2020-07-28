@@ -8,7 +8,7 @@
       @click.native="active = index"
     >
       <span
-        class="material-icons md-40 nav-icon"
+        class="material-icons md-40 nav-icon text"
         v-bind:class="{ 'active-link': checkActive(index) }"
         >{{ link.name }}</span
       >

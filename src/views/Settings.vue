@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Hi, {{ userInfo.name }}!</h1>
+    <h1 class="title">Settings</h1>
     <span class="text"
       >Here's where you can manage the details of your Account.</span
     >

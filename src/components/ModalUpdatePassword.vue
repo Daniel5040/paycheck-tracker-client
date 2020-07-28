@@ -1,32 +1,52 @@
 <template>
   <form @submit.prevent class="container-modal">
+    <span class="error form-title" v-if="error">{{ error }}</span>
     <h2>Change Password</h2>
     <input
       class="input"
       type="password"
-      v-model="password"
+      v-model.trim="$v.password.$model"
       placeholder="New Password"
-      required
+      @blur="$v.password.$touch()"
+      :class="{ 'input-error': $v.password.$error }"
     />
+    <div class="error" v-if="$v.password.$error">
+      <span v-if="!$v.password.required">Password is required</span>
+      <span v-if="!$v.password.minLength">
+        Password must be at least
+        {{ $v.password.$params.minLength.min }} characters long
+      </span>
+    </div>
     <input
       class="input"
       type="password"
-      v-model="repeatPassword"
+      v-model.trim="$v.repeatPassword.$model"
       placeholder="Confirm Password"
-      required
+      @blur="$v.repeatPassword.$touch()"
+      :class="{ 'input-error': $v.repeatPassword.$error }"
     />
-    <transition name="down" mode="out-in">
-      <span class="error" v-show="error">{{ error }}</span>
-    </transition>
-    <transition name="down" mode="out-in">
-      <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
-    </transition>
-    <button @click="submitForm">Change Password</button>
+    <div class="error" v-if="$v.repeatPassword.$error">
+      <span v-if="!$v.repeatPassword.required">Password is required</span>
+      <span
+        v-if="!$v.repeatPassword.sameAsPassword && $v.repeatPassword.required"
+      >
+        Passwords do not match
+      </span>
+    </div>
+    <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    <button
+      :disabled="$v.$invalid"
+      :class="{ disabled: $v.$invalid }"
+      @click="submitForm"
+    >
+      Change Password
+    </button>
   </form>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { required, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
   name: 'ModalUpdatePassword',
@@ -35,24 +55,32 @@ export default {
     return {
       password: '',
       repeatPassword: '',
-      error: ''
+      same: false,
+      error: null
+    }
+  },
+  validations: {
+    password: { required, minLength: minLength(8) },
+    repeatPassword: {
+      required,
+      sameAsPassword: sameAs(function() {
+        return this.password
+      })
     }
   },
   methods: {
     ...mapActions(['updatePassword']),
-    submitForm() {
-      if (this.password === this.repeatPassword) {
-        this.updatePassword({ id: this.id, password: this.password })
-        this.$emit('closeModal')
+    async submitForm() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.error = 'Please fill the form correctly'
+      } else {
+        await this.updatePassword({ id: this.id, password: this.password })
+        setTimeout(() => (this.error = null), 500)
+        if (!this.errorMessage) {
+          this.$emit('closeModal')
+        }
       }
-    }
-  },
-  watch: {
-    repeatPassword() {
-      if (this.repeatPassword !== this.password)
-        this.error = 'Passwords do not match'
-      else this.error = ''
-      setTimeout(() => (this.error = ''), 4000)
     }
   },
   computed: mapGetters(['errorMessage'])

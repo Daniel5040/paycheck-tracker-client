@@ -1,25 +1,29 @@
 <template>
   <div>
+    <div class="modal-overlay" v-if="modal.showModal" @click="allFalse"></div>
     <transition name="fade" mode="out-in">
-      <div class="modal-overlay" v-if="modal.showModal" @click="allFalse"></div>
+      <ModalUpdatePassword
+        class="modal"
+        v-if="modal.showPassword"
+        @closeModal="allFalse"
+        :id="userInfo.id"
+      />
     </transition>
-    <ModalUpdatePassword
-      class="modal"
-      v-if="modal.showPassword"
-      @closeModal="allFalse"
-      :id="userInfo.id"
-    />
-    <ModalUpdateInfo
-      class="modal"
-      v-if="modal.showUpdate"
-      @closeModal="updateInfo"
-    />
-    <ModalDeleteAccount
-      class="modal"
-      v-if="modal.showDelete"
-      @closeModal="allFalse"
-      :id="userInfo.id"
-    />
+    <transition name="fade" mode="out-in">
+      <ModalUpdateInfo
+        class="modal"
+        v-if="modal.showUpdate"
+        @closeModal="updateInfo"
+      />
+    </transition>
+    <transition name="fade" mode="out-in">
+      <ModalDeleteAccount
+        class="modal"
+        v-if="modal.showDelete"
+        @closeModal="allFalse"
+        :id="userInfo.id"
+      />
+    </transition>
   </div>
 </template>
 

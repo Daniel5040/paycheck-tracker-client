@@ -50,6 +50,7 @@ const actions = {
     } catch (error) {
       commit('auth_error', error.response.data.error)
       localStorage.removeItem('token')
+      setTimeout(() => commit('clear_error'), 4000)
     }
   },
 
@@ -71,6 +72,7 @@ const actions = {
     } catch (error) {
       commit('auth_error', error.response.data.error)
       localStorage.removeItem('token')
+      setTimeout(() => commit('clear_error'), 4000)
     }
   },
 
@@ -81,6 +83,7 @@ const actions = {
       commit('update_info', data)
     } catch (error) {
       commit('auth_error', error.response.data.error)
+      setTimeout(() => commit('clear_error'), 4000)
     }
   },
 
@@ -90,6 +93,7 @@ const actions = {
       await axios.put(`${url}/update/password/${id}`, { password })
     } catch (error) {
       commit('auth_error', error.response.data.error)
+      setTimeout(() => commit('clear_error'), 4000)
     }
   },
 
@@ -105,6 +109,7 @@ const actions = {
     } catch (error) {
       commit('auth_error', error.response.data.error)
       localStorage.removeItem('token')
+      setTimeout(() => commit('clear_error'), 4000)
     }
   },
 

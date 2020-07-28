@@ -1,58 +1,73 @@
 <template>
   <form @submit.prevent class="container login">
+    <span class="error form-title" v-if="error">{{ error }}</span>
     <input
       class="input"
       type="email"
-      v-model="email"
+      v-model.trim="$v.email.$model"
       placeholder="E-mail"
-      required
+      @blur="$v.email.$touch()"
+      :class="{ 'input-error': $v.email.$error }"
     />
+    <div class="error" v-if="$v.email.$error">
+      <span v-if="!$v.email.required">Email is required</span>
+      <span v-if="!$v.email.email">Invalid email</span>
+    </div>
     <input
       class="input"
       type="password"
-      v-model="password"
+      v-model.trim="$v.password.$model"
       placeholder="Password"
-      required
+      @blur="$v.password.$touch()"
+      :class="{ 'input-error': $v.password.$error }"
     />
-    <transition name="down" mode="out-in">
-      <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
-    </transition>
-    <button @click="submitForm">Login</button>
-    <span>Don't have an account?</span>
+    <div class="error" v-if="$v.password.$error">
+      <span v-if="!$v.password.required">Password is required</span>
+    </div>
+    <span class="error" v-if="errorMessage">{{ errorMessage }}</span>
+    <button
+      :disabled="$v.$invalid"
+      :class="{ disabled: $v.$invalid }"
+      @click="submitForm"
+    >
+      Login
+    </button>
+    <span class="text">Don't have an account?</span>
     <span class="swap" @click="$emit('swap')">Sign up</span>
   </form>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   name: 'Login',
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      error: null
     }
   },
+  validations: {
+    email: { required, email },
+    password: { required }
+  },
   methods: {
-    ...mapActions(['login', 'clearError', 'getUserInfo']),
+    ...mapActions(['login', 'getUserInfo']),
     async submitForm() {
-      const user = {
-        email: this.email,
-        password: this.password
-      }
-      await this.login(user)
-      if (!this.errorMessage) {
-        this.clearForm()
-        this.getUserInfo(user.email)
-        this.$router.push({ name: 'Home' })
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.error = 'Please fill the form correctly.'
       } else {
-        setTimeout(() => this.clearError(), 4000)
+        await this.login({ email: this.email, password: this.password })
+        setTimeout(() => (this.error = null), 500)
+        if (!this.errorMessage) {
+          this.getUserInfo(this.email)
+          this.$router.push({ name: 'Home' })
+        }
       }
-    },
-    clearForm() {
-      this.email = ''
-      this.password = ''
     }
   },
   computed: mapGetters(['errorMessage'])

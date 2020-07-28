@@ -43,8 +43,7 @@ h2,
 h4,
 p,
 input,
-button,
-span {
+button {
   color: $text-color;
 }
 
@@ -54,8 +53,8 @@ body {
 }
 
 button {
-  font-size: 0.85rem;
-  padding: 15px 25px;
+  font-size: 1rem;
+  padding: 15px 40px;
   background-color: $secondary-color;
   border: none;
   border-radius: 50px;
@@ -70,6 +69,16 @@ button {
 
   &:focus {
     outline: none;
+  }
+}
+
+.disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: #ccc;
   }
 }
 
@@ -103,10 +112,22 @@ button {
   }
 }
 
+.input-error {
+  border-bottom: 1px solid #d8000c;
+}
+
+.text {
+  color: $text-color;
+}
+
 .error {
-  color: #e76c6c;
+  color: #d8000c;
   text-align: left;
   font-size: 14px;
+
+  &.form-title {
+    text-align: center;
+  }
 }
 
 .swap {
@@ -114,20 +135,55 @@ button {
   cursor: pointer;
 }
 
+.vdatetime-popup {
+  background: $primary-color !important;
+  color: $text-color !important;
+  border: 1px solid $accent-color;
+}
+
+.vdatetime-calendar__month__day--selected > span > span,
+.vdatetime-calendar__month__day--selected:hover > span > span {
+  background: $secondary-color !important;
+}
+
+.vdatetime-calendar__month__day:hover > span > span {
+  background: $secondary-color !important;
+}
+
+.vdatetime-popup__actions__button {
+  color: $secondary-color !important;
+}
+
+.vdatetime-popup__header {
+  background: $secondary-color !important;
+}
+
 // Transitions
 .down-enter-active {
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
   transition-duration: 0.3s;
+  -moz-transition-timing-function: ease-in;
+  -webkit-transition-timing-function: ease-in;
+  -o-transition-timing-function: ease-in;
   transition-timing-function: ease-in;
 }
 
 .down-leave-active {
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
   transition-duration: 0.3s;
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -moz-transition-timing-function: ease-out;
+  -webkit-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
 }
 
 .down-enter-to,
 .down-leave {
-  max-height: 100%;
+  max-height: 300px;
   overflow: hidden;
 }
 

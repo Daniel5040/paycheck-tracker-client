@@ -1,38 +1,61 @@
 <template>
   <form @submit.prevent class="container-modal">
+    <span class="error form-title" v-if="error">{{ error }}</span>
     <h2>Update Information</h2>
     <input
       class="input"
       type="text"
-      v-model="user.name"
+      v-model.trim="$v.user.name.$model"
       placeholder="Name"
-      required
+      @blur="$v.user.name.$touch()"
+      :class="{ 'input-error': $v.user.name.$error }"
     />
+    <div class="error" v-if="$v.user.name.$error">
+      <span v-if="!$v.user.name.required">Name is required</span>
+      <span v-if="!$v.user.name.minLength">
+        Name must be at least
+        {{ $v.user.name.$params.minLength.min }} characters long
+      </span>
+      <span v-if="!$v.user.name.alpha">
+        Name cannot contain special characters or numbers
+      </span>
+    </div>
     <input
       class="input"
       type="text"
-      v-model="user.wage"
+      v-model.trim="$v.user.wage.$model"
       placeholder="Wage"
-      required
+      @blur="$v.user.wage.$touch()"
+      :class="{ 'input-error': $v.user.wage.$error }"
     />
+    <div class="error" v-if="$v.user.wage.$error">
+      <span v-if="!$v.user.wage.required">Wage is required</span>
+    </div>
     <input
       class="input"
       type="password"
-      v-model="password"
+      v-model.trim="$v.password.$model"
       placeholder="Password"
+      @blur="$v.password.$touch()"
+      :class="{ 'input-error': $v.password.$error }"
     />
-    <transition name="down" mode="out-in">
-      <span class="error" v-show="error">{{ error }}</span>
-    </transition>
-    <transition name="down" mode="out-in">
-      <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
-    </transition>
-    <button @click="submitForm">Update Info</button>
+    <div class="error" v-if="$v.password.$error">
+      <span v-if="!$v.password.required">Password is required</span>
+    </div>
+    <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    <button
+      :disabled="$v.$invalid"
+      :class="{ disabled: $v.$invalid }"
+      @click="submitForm"
+    >
+      Update Info
+    </button>
   </form>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { required, minLength, alpha } from 'vuelidate/lib/validators'
 
 export default {
   name: 'ModalUpdateInfo',
@@ -40,23 +63,33 @@ export default {
     return {
       user: {},
       password: '',
-      error: ''
+      error: null
     }
+  },
+  validations: {
+    user: {
+      name: { required, minLength: minLength(3), alpha },
+      wage: { required }
+    },
+    password: { required }
   },
   methods: {
     ...mapActions(['updateInfo']),
-    submitForm() {
-      if (this.password.length > 3) {
+    async submitForm() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.error = 'Please fill the form correctly'
+      } else {
         const data = {
           name: this.user.name,
           wage: this.user.wage,
           password: this.password
         }
-        this.updateInfo({ id: this.user.id, data })
-        this.$emit('closeModal')
-      } else {
-        this.error = 'Password required'
-        setTimeout(() => (this.error = ''), 4000)
+        await this.updateInfo({ id: this.user.id, data })
+        setTimeout(() => (this.error = null), 500)
+        if (!this.errorMessage) {
+          this.$emit('closeModal')
+        }
       }
     }
   },
