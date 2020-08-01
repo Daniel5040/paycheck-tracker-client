@@ -21,8 +21,8 @@ const routes = [
   },
   {
     path: '/paycheck/create',
-    name: 'CreatePaycheck',
-    component: () => import('@/views/CreatePaycheck.vue'),
+    name: 'Create',
+    component: () => import('@/views/Create.vue'),
     beforeEnter: (to, from, next) => {
       if (!store.getters.isLoggedIn) next({ name: 'Login' })
       else next()

@@ -16,13 +16,13 @@
       <span v-if="!$v.email.required">Email is required</span>
       <span v-if="!$v.email.email">Invalid email</span>
     </div>
-    <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    <span class="error" v-show="userError">{{ userError }}</span>
     <button
       :disabled="$v.$invalid"
       :class="{ disabled: $v.$invalid }"
       @click="submitForm"
     >
-      Delete Account
+      Delete
     </button>
   </form>
 </template>
@@ -32,7 +32,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'ModalDeleteAccount',
+  name: 'SettingsDeleteAccount',
   props: ['id'],
   data() {
     return {
@@ -52,13 +52,13 @@ export default {
       } else {
         await this.deleteAccount(this.id)
         setTimeout(() => (this.error = null), 500)
-        if (!this.errorMessage) {
+        if (!this.userError) {
           this.$emit('closeModal')
         }
       }
     }
   },
-  computed: mapGetters(['errorMessage'])
+  computed: mapGetters(['userError'])
 }
 </script>
 

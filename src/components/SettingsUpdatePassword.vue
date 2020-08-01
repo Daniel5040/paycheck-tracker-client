@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent class="container-modal">
     <span class="error form-title" v-if="error">{{ error }}</span>
-    <h2>Change Password</h2>
+    <h2>Update Password</h2>
     <input
       class="input"
       type="password"
@@ -33,13 +33,13 @@
         Passwords do not match
       </span>
     </div>
-    <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    <span class="error" v-show="userError">{{ userError }}</span>
     <button
       :disabled="$v.$invalid"
       :class="{ disabled: $v.$invalid }"
       @click="submitForm"
     >
-      Change Password
+      Update
     </button>
   </form>
 </template>
@@ -49,7 +49,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { required, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'ModalUpdatePassword',
+  name: 'SettingsUpdatePassword',
   props: ['id'],
   data() {
     return {
@@ -77,13 +77,13 @@ export default {
       } else {
         await this.updatePassword({ id: this.id, password: this.password })
         setTimeout(() => (this.error = null), 500)
-        if (!this.errorMessage) {
+        if (!this.userError) {
           this.$emit('closeModal')
         }
       }
     }
   },
-  computed: mapGetters(['errorMessage'])
+  computed: mapGetters(['userError'])
 }
 </script>
 

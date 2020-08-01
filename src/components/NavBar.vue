@@ -24,7 +24,7 @@ export default {
       links: [
         { name: 'home', link: { name: 'Home' } },
         { name: 'format_list_bulleted', link: { name: 'Paychecks' } },
-        { name: 'add_circle', link: { name: 'CreatePaycheck' } },
+        { name: 'add_circle', link: { name: 'Create' } },
         { name: 'settings', link: { name: 'Settings' } }
       ],
       active: -1

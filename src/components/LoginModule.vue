@@ -24,7 +24,7 @@
     <div class="error" v-if="$v.password.$error">
       <span v-if="!$v.password.required">Password is required</span>
     </div>
-    <span class="error" v-if="errorMessage">{{ errorMessage }}</span>
+    <span class="error" v-if="userError">{{ userError }}</span>
     <button
       :disabled="$v.$invalid"
       :class="{ disabled: $v.$invalid }"
@@ -55,7 +55,7 @@ export default {
     password: { required }
   },
   methods: {
-    ...mapActions(['login', 'getUserInfo']),
+    ...mapActions(['login', 'getUserInfo', 'getPaychecks']),
     async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -63,14 +63,15 @@ export default {
       } else {
         await this.login({ email: this.email, password: this.password })
         setTimeout(() => (this.error = null), 500)
-        if (!this.errorMessage) {
-          this.getUserInfo(this.email)
+        if (!this.userError) {
+          await this.getUserInfo(this.email)
+          await this.getPaychecks(this.userInfo.id)
           this.$router.push({ name: 'Home' })
         }
       }
     }
   },
-  computed: mapGetters(['errorMessage'])
+  computed: mapGetters(['userError', 'userInfo'])
 }
 </script>
 

@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <h1 class="title">Settings</h1>
+    <h1 class="title">Create</h1>
     <span class="text">
-      Here's where you can manage the details of your Account.
+      Here you can create a new paycheck or workday.
     </span>
     <div class="cards">
       <BaseCard
@@ -18,71 +18,52 @@
           <span class="text">{{ slot.text }}</span>
         </template>
       </BaseCard>
-      <SettingsOverlay @closeModal="closeModal" :modal="modal" />
     </div>
+    <CreateOverlay @closeModal="closeModal" :modal="modal" />
   </div>
 </template>
 
 <script>
 import BaseCard from '@/components/BaseCard'
-import SettingsOverlay from '@/components/SettingsOverlay'
-import { mapActions, mapGetters } from 'vuex'
+import CreateOverlay from '@/components/CreateOverlay'
 
 export default {
-  name: 'Settings',
+  name: 'NewPaycheck',
   components: {
     BaseCard,
-    SettingsOverlay
+    CreateOverlay
   },
   data() {
     return {
       slots: [
         {
-          icon: 'https',
-          title: 'Password',
-          text: 'Manage your password'
+          icon: 'date_range',
+          title: 'Paycheck',
+          text: 'Create paycheck'
         },
         {
-          icon: 'person',
-          title: 'Personal Info',
-          text: 'Manage personal info'
-        },
-        {
-          icon: 'delete_forever',
-          title: 'Delete Account',
-          text: 'Delete your account'
-        },
-        {
-          icon: 'cancel',
-          title: 'Logout',
-          text: 'Get outta here'
+          icon: 'today',
+          title: 'Workday',
+          text: 'Create Workday'
         }
       ],
       modal: {
         showModal: false,
-        showPassword: false,
-        showUpdate: false,
-        showDelete: false
+        showPaycheck: false,
+        showWorkday: false
       }
     }
   },
   methods: {
-    ...mapActions(['logout']),
     click(index) {
       this.modal.showModal = true
 
       switch (index) {
         case 0:
-          this.modal.showPassword = true
+          this.modal.showPaycheck = true
           break
         case 1:
-          this.modal.showUpdate = true
-          break
-        case 2:
-          this.modal.showDelete = true
-          break
-        case 3:
-          this.logout()
+          this.modal.showWorkday = true
           break
         default:
           break
@@ -93,12 +74,15 @@ export default {
         this.modal[key] = false
       }
     }
-  },
-  computed: mapGetters(['userInfo'])
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.cards {
+  margin-top: 150px;
+}
+
 .text {
   font-size: 14px;
 }

@@ -6,13 +6,13 @@ const token = localStorage.getItem('token')
 if (token) axios.defaults.headers.common['Authorization'] = token
 
 const state = {
-  error: '',
+  userError: '',
   token: localStorage.getItem('token') || '',
   user: {}
 }
 
 const mutations = {
-  success: (state, token, user) => {
+  set_user_info: (state, token, user) => {
     state.token = token
     state.user = user
   },
@@ -20,10 +20,10 @@ const mutations = {
     state.token = ''
     state.user = {}
   },
-  auth_error: (state, error) => (state.error = error),
-  clear_error: state => (state.error = ''),
-  user_info: (state, user) => (state.user = user),
-  update_info: (state, data) => {
+  set_user_error: (state, userError) => (state.userError = userError),
+  clear_user_error: state => (state.userError = ''),
+  set_user: (state, user) => (state.user = user),
+  update_user_info: (state, data) => {
     state.user.name = data.name
     state.user.wage = data.wage
   }
@@ -34,7 +34,7 @@ const actions = {
   async getUserInfo({ commit }, email) {
     const res = await axios.get(`${url}/getInfo/${email}`)
     const user = res.data
-    commit('user_info', user)
+    commit('set_user', user)
   },
 
   // Login
@@ -46,11 +46,11 @@ const actions = {
       localStorage.setItem('token', token)
       localStorage.setItem('email', user.email)
       axios.defaults.headers.common['Authorization'] = token
-      commit('success', token, user)
-    } catch (error) {
-      commit('auth_error', error.response.data.error)
+      commit('set_user_info', token, user)
+    } catch (userError) {
+      commit('set_user_error', userError.response.data.userError)
       localStorage.removeItem('token')
-      setTimeout(() => commit('clear_error'), 4000)
+      setTimeout(() => commit('clear_user_error'), 4000)
     }
   },
 
@@ -68,11 +68,11 @@ const actions = {
       localStorage.setItem('token', token)
       localStorage.setItem('email', user.email)
       axios.defaults.headers.common['Authorization'] = token
-      commit('success', token, user)
-    } catch (error) {
-      commit('auth_error', error.response.data.error)
+      commit('set_user_info', token, user)
+    } catch (userError) {
+      commit('set_user_error', userError.response.data.userError)
       localStorage.removeItem('token')
-      setTimeout(() => commit('clear_error'), 4000)
+      setTimeout(() => commit('clear_user_error'), 4000)
     }
   },
 
@@ -80,10 +80,10 @@ const actions = {
   async updateInfo({ commit }, { id, data }) {
     try {
       await axios.put(`${url}/update/info/${id}`, data)
-      commit('update_info', data)
-    } catch (error) {
-      commit('auth_error', error.response.data.error)
-      setTimeout(() => commit('clear_error'), 4000)
+      commit('update_user_info', data)
+    } catch (userError) {
+      commit('set_user_error', userError.response.data.userError)
+      setTimeout(() => commit('clear_user_error'), 4000)
     }
   },
 
@@ -91,9 +91,9 @@ const actions = {
   async updatePassword({ commit }, { id, password }) {
     try {
       await axios.put(`${url}/update/password/${id}`, { password })
-    } catch (error) {
-      commit('auth_error', error.response.data.error)
-      setTimeout(() => commit('clear_error'), 4000)
+    } catch (userError) {
+      commit('set_user_error', userError.response.data.userError)
+      setTimeout(() => commit('clear_user_error'), 4000)
     }
   },
 
@@ -106,10 +106,10 @@ const actions = {
       localStorage.removeItem('email')
       delete axios.defaults.headers.common['Authorization']
       router.push({ name: 'Login' })
-    } catch (error) {
-      commit('auth_error', error.response.data.error)
+    } catch (userError) {
+      commit('set_user_error', userError.response.data.userError)
       localStorage.removeItem('token')
-      setTimeout(() => commit('clear_error'), 4000)
+      setTimeout(() => commit('clear_user_error'), 4000)
     }
   },
 
@@ -120,18 +120,12 @@ const actions = {
     localStorage.removeItem('email')
     delete axios.defaults.headers.common['Authorization']
     router.push({ name: 'Login' })
-  },
-
-  // Clear error
-  clearError({ commit }) {
-    commit('clear_error')
   }
 }
 
 const getters = {
   isLoggedIn: state => !!state.token,
-  authStatus: state => state.status,
-  errorMessage: state => state.error,
+  userError: state => state.userError,
   userInfo: state => state.user
 }
 

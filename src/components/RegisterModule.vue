@@ -57,7 +57,7 @@
     <div class="error" v-if="$v.wage.$error">
       <span v-if="!$v.wage.required">Wage is required</span>
     </div>
-    <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    <span class="error" v-show="userError">{{ userError }}</span>
     <button
       :disabled="$v.$invalid"
       :class="{ disabled: $v.$invalid }"
@@ -106,14 +106,14 @@ export default {
         }
         await this.register(user)
         setTimeout(() => (this.error = null), 500)
-        if (!this.errorMessage) {
+        if (!this.userError) {
           this.getUserInfo(user.email)
           this.$router.push({ name: 'Home' })
         }
       }
     }
   },
-  computed: mapGetters(['errorMessage'])
+  computed: mapGetters(['userError'])
 }
 </script>
 

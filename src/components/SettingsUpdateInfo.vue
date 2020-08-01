@@ -42,13 +42,13 @@
     <div class="error" v-if="$v.password.$error">
       <span v-if="!$v.password.required">Password is required</span>
     </div>
-    <span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+    <span class="error" v-show="userError">{{ userError }}</span>
     <button
       :disabled="$v.$invalid"
       :class="{ disabled: $v.$invalid }"
       @click="submitForm"
     >
-      Update Info
+      Update
     </button>
   </form>
 </template>
@@ -58,7 +58,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { required, minLength, alpha } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'ModalUpdateInfo',
+  name: 'SettingsUpdateInfo',
   data() {
     return {
       user: {},
@@ -87,13 +87,13 @@ export default {
         }
         await this.updateInfo({ id: this.user.id, data })
         setTimeout(() => (this.error = null), 500)
-        if (!this.errorMessage) {
+        if (!this.userError) {
           this.$emit('closeModal')
         }
       }
     }
   },
-  computed: mapGetters(['errorMessage', 'userInfo']),
+  computed: mapGetters(['userError', 'userInfo']),
   beforeMount() {
     this.user = this.userInfo
   }

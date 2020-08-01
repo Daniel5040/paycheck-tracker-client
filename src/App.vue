@@ -16,11 +16,14 @@ export default {
   components: {
     NavBar
   },
-  methods: mapActions(['getUserInfo']),
-  computed: mapGetters(['isLoggedIn']),
-  created() {
+  methods: mapActions(['getUserInfo', 'getPaychecks']),
+  computed: mapGetters(['isLoggedIn', 'userInfo']),
+  async created() {
     const email = localStorage.getItem('email')
-    if (this.isLoggedIn) this.getUserInfo(email)
+    if (this.isLoggedIn) {
+      await this.getUserInfo(email)
+      this.getPaychecks(this.userInfo.id)
+    }
   }
 }
 </script>
@@ -86,6 +89,11 @@ button {
   display: flex;
   flex-direction: column;
   margin: 0 8%;
+  margin-top: 100px;
+
+  .title {
+    margin-bottom: 20px;
+  }
 }
 
 .container-modal {
@@ -93,6 +101,38 @@ button {
   flex-direction: column;
   padding: 30px 50px;
   width: 75%;
+}
+
+.cards {
+  margin-top: 100px;
+  display: flex;
+  flex-wrap: wrap;
+
+  .text {
+    color: $secondary-color;
+    font-size: 13px;
+  }
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 98;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  background: $primary-color;
+  border: 1px solid darken($accent-color, 10%);
+  border-radius: 16px;
 }
 
 .input {
