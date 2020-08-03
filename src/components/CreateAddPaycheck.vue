@@ -10,7 +10,7 @@
       @blur="$v.start.$touch()"
       :class="{ 'input-error': $v.start.$error, date: $v.start.$error }"
     ></datetime>
-    <div class="error" v-if="$v.start.$error">
+    <div class="error" v-if="$v.start.$error && start">
       <span v-if="!$v.start.required">Field is required</span>
     </div>
     <datetime
@@ -21,7 +21,7 @@
       @blur="$v.end.$touch()"
       :class="{ 'input-error': $v.end.$error, date: $v.end.$error }"
     ></datetime>
-    <div class="error" v-if="$v.end.$error">
+    <div class="error" v-if="$v.end.$error && end">
       <span v-if="!$v.end.required">Field is required</span>
     </div>
     <span class="error" v-show="paycheckError">{{ paycheckError }}</span>
@@ -46,6 +46,7 @@ export default {
   components: {
     datetime: Datetime
   },
+  props: ['id'],
   data() {
     return {
       start: '',
@@ -59,7 +60,8 @@ export default {
         outline: 'none',
         padding: '15px 5px',
         'padding-bottom': '5px',
-        margin: '10px 0'
+        margin: '10px 0',
+        'text-align': 'start'
       }
     }
   },
@@ -68,13 +70,23 @@ export default {
     end: { required }
   },
   methods: {
-    ...mapActions(['createPaycheck']),
-    submitForm() {
+    ...mapActions(['createPaycheck', 'getPaychecks']),
+    async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         this.error = 'Please fill the form correctly.'
       } else {
-        console.log(this.start, this.end)
+        const data = {
+          start: this.start,
+          end: this.end,
+          user: this.id
+        }
+        await this.createPaycheck(data)
+        setTimeout(() => (this.error = null), 500)
+        if (!this.paycheckError) {
+          this.getPaychecks(this.id)
+          this.$emit('closeModal')
+        }
       }
     }
   },

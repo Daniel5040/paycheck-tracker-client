@@ -26,7 +26,7 @@
 <script>
 import BaseCard from '@/components/BaseCard'
 import SettingsOverlay from '@/components/SettingsOverlay'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Settings',
@@ -93,8 +93,7 @@ export default {
         this.modal[key] = false
       }
     }
-  },
-  computed: mapGetters(['userInfo'])
+  }
 }
 </script>
 

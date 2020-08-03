@@ -1,5 +1,7 @@
 <template>
-  <h1>Paychecks</h1>
+  <div class="container">
+    <h1 class="title">Paychecks</h1>
+  </div>
 </template>
 
 <script>

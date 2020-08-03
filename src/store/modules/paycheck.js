@@ -31,8 +31,8 @@ const actions = {
       const res = await axios.get(`${url}/user/${id}`)
       const data = res.data
       commit('set_paycheck_info', data)
-    } catch (paycheckError) {
-      commit('set_paycheck_error', paycheckError.response.data.paycheckError)
+    } catch (error) {
+      commit('set_paycheck_error', error.response.data.error)
       setTimeout(() => commit('clear_paycheck_error'), 4000)
     }
   },
@@ -40,11 +40,11 @@ const actions = {
   // Create paycheck
   async createPaycheck({ commit }, data) {
     try {
-      const res = await axios.post(`${url}/create_paycheck`, data)
+      const res = await axios.post(`${url}/create`, data)
       const newPaycheck = res.data.data
       commit('create_paycheck', newPaycheck)
-    } catch (paycheckError) {
-      commit('set_paycheck_error', paycheckError.response.data.paycheckError)
+    } catch (error) {
+      commit('set_paycheck_error', error.response.data.error)
       setTimeout(() => commit('clear_paycheck_error'), 4000)
     }
   },
@@ -53,8 +53,8 @@ const actions = {
   async updatePaycheck({ commit }, { userId, paycheckId }) {
     try {
       await axios.put(`${url}/update/${paycheckId}/${userId}`)
-    } catch (paycheckError) {
-      commit('set_paycheck_error', paycheckError.response.data.paycheckError)
+    } catch (error) {
+      commit('set_paycheck_error', error.response.data.error)
       setTimeout(() => commit('clear_paycheck_error'), 4000)
     }
   },
@@ -63,8 +63,8 @@ const actions = {
   async updatePaycheckDate({ commit }, { id, data }) {
     try {
       await axios.put(`${url}/update/date/${id}`, data)
-    } catch (paycheckError) {
-      commit('set_paycheck_error', paycheckError.response.data.paycheckError)
+    } catch (error) {
+      commit('set_paycheck_error', error.response.data.error)
       setTimeout(() => commit('clear_paycheck_error'), 4000)
     }
   },
@@ -73,8 +73,8 @@ const actions = {
   async deletePaycheck({ commit }, id) {
     try {
       await axios.delete(`${url}/delete/${id}`)
-    } catch (paycheckError) {
-      commit('set_paycheck_error', paycheckError.response.data.paycheckError)
+    } catch (error) {
+      commit('set_paycheck_error', error.response.data.error)
       setTimeout(() => commit('clear_paycheck_error'), 4000)
     }
   }

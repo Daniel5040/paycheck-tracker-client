@@ -47,8 +47,8 @@ const actions = {
       localStorage.setItem('email', user.email)
       axios.defaults.headers.common['Authorization'] = token
       commit('set_user_info', token, user)
-    } catch (userError) {
-      commit('set_user_error', userError.response.data.userError)
+    } catch (error) {
+      commit('set_user_error', error.response.data.error)
       localStorage.removeItem('token')
       setTimeout(() => commit('clear_user_error'), 4000)
     }
@@ -69,8 +69,8 @@ const actions = {
       localStorage.setItem('email', user.email)
       axios.defaults.headers.common['Authorization'] = token
       commit('set_user_info', token, user)
-    } catch (userError) {
-      commit('set_user_error', userError.response.data.userError)
+    } catch (error) {
+      commit('set_user_error', error.response.data.error)
       localStorage.removeItem('token')
       setTimeout(() => commit('clear_user_error'), 4000)
     }
@@ -81,8 +81,8 @@ const actions = {
     try {
       await axios.put(`${url}/update/info/${id}`, data)
       commit('update_user_info', data)
-    } catch (userError) {
-      commit('set_user_error', userError.response.data.userError)
+    } catch (error) {
+      commit('set_user_error', error.response.data.error)
       setTimeout(() => commit('clear_user_error'), 4000)
     }
   },
@@ -91,8 +91,8 @@ const actions = {
   async updatePassword({ commit }, { id, password }) {
     try {
       await axios.put(`${url}/update/password/${id}`, { password })
-    } catch (userError) {
-      commit('set_user_error', userError.response.data.userError)
+    } catch (error) {
+      commit('set_user_error', error.response.data.error)
       setTimeout(() => commit('clear_user_error'), 4000)
     }
   },
@@ -106,8 +106,8 @@ const actions = {
       localStorage.removeItem('email')
       delete axios.defaults.headers.common['Authorization']
       router.push({ name: 'Login' })
-    } catch (userError) {
-      commit('set_user_error', userError.response.data.userError)
+    } catch (error) {
+      commit('set_user_error', error.response.data.error)
       localStorage.removeItem('token')
       setTimeout(() => commit('clear_user_error'), 4000)
     }

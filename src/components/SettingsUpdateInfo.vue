@@ -74,7 +74,7 @@ export default {
     password: { required }
   },
   methods: {
-    ...mapActions(['updateInfo']),
+    ...mapActions(['updateInfo', 'updatePaycheck', 'getPaychecks']),
     async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -88,12 +88,17 @@ export default {
         await this.updateInfo({ id: this.user.id, data })
         setTimeout(() => (this.error = null), 500)
         if (!this.userError) {
+          await this.updatePaycheck({
+            userId: this.user.id,
+            paycheckId: this.paycheckActive._id
+          })
+          this.getPaychecks(this.user.id)
           this.$emit('closeModal')
         }
       }
     }
   },
-  computed: mapGetters(['userError', 'userInfo']),
+  computed: mapGetters(['userError', 'userInfo', 'paycheckActive']),
   beforeMount() {
     this.user = this.userInfo
   }

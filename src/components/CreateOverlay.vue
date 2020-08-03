@@ -10,6 +10,7 @@
         class="modal"
         v-if="modal.showPaycheck"
         @closeModal="$emit('closeModal')"
+        :id="userInfo.id"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -17,6 +18,7 @@
         class="modal"
         v-if="modal.showWorkday"
         @closeModal="$emit('closeModal')"
+        :id="userInfo.id"
       />
     </transition>
   </div>
@@ -25,6 +27,7 @@
 <script>
 import CreateAddPaycheck from '@/components/CreateAddPaycheck'
 import CreateAddWorkday from '@/components/CreateAddWorkday'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CreateOverlay',
@@ -32,7 +35,8 @@ export default {
     CreateAddPaycheck,
     CreateAddWorkday
   },
-  props: ['modal']
+  props: ['modal'],
+  computed: mapGetters(['userInfo'])
 }
 </script>
 
