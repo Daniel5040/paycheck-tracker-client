@@ -1,16 +1,14 @@
 <template>
   <div class="current-paycheck">
-    <h2 class="title orange">Your latest paycheck</h2>
+    <slot></slot>
     <div class="container-top">
       <div class="paycheck">
-        <h1 class="money">
-          ${{ (paycheckActive.credit + paycheckActive.cash) | money }}
-        </h1>
+        <h1 class="money">${{ (paycheck.credit + paycheck.cash) | money }}</h1>
         <h3 class="orange">NET PAY</h3>
       </div>
       <div class="hours">
         <h1>
-          {{ (paycheckActive.hours + paycheckActive.overtime) | decimal }}
+          {{ (paycheck.hours + paycheck.overtime) | decimal }}
         </h1>
         <h3 class="orange">HOURS WORKED</h3>
       </div>
@@ -18,17 +16,15 @@
     <div class="mt">
       <div class="container-bottom row">
         <p>Days:</p>
-        <p class="right">{{ paycheckActive.days }}</p>
+        <p class="right">{{ paycheck.days }}</p>
       </div>
       <div class="container-bottom row">
-        <p>
-          Hourly ({{ paycheckActive.hours }} @ {{ +userInfo.wage | money }})
-        </p>
+        <p>Hourly ({{ paycheck.hours }} @ {{ +userInfo.wage | money }})</p>
         <p class="right">${{ hourly | money }}</p>
       </div>
       <div class="container-bottom row">
         <p>
-          Overtime ({{ paycheckActive.overtime }} @
+          Overtime ({{ paycheck.overtime }} @
           {{ (+userInfo.wage * 1.5) | money }})
         </p>
         <p class="right">${{ overtime | money }}</p>
@@ -39,13 +35,13 @@
       </div>
       <div class="container-bottom row">
         <p>Cash tips</p>
-        <p class="right">${{ paycheckActive.cash | money }}</p>
+        <p class="right">${{ paycheck.cash | money }}</p>
       </div>
     </div>
     <p class="mt">
-      Pay Period: {{ paycheckActive.start | formatDate }} -
-      {{ paycheckActive.end | formatDate }},
-      {{ paycheckActive.start | year }}
+      Pay Period: {{ paycheck.start | formatDate }} -
+      {{ paycheck.end | formatDate }},
+      {{ paycheck.end | year }}
     </p>
   </div>
 </template>
@@ -56,6 +52,7 @@ import moment from 'moment'
 
 export default {
   name: 'HomePaycheckInfo',
+  props: ['paycheck'],
   filters: {
     decimal(number) {
       return Math.round((number + Number.EPSILON) * 100) / 100
@@ -80,18 +77,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['paycheckActive', 'userInfo']),
+    ...mapGetters(['userInfo']),
     hourly() {
-      return this.paycheckActive.hours * +this.userInfo.wage
+      return this.paycheck.hours * +this.userInfo.wage
     },
     overtime() {
-      return this.paycheckActive.overtime * (+this.userInfo.wage * 1.5)
+      return this.paycheck.overtime * (+this.userInfo.wage * 1.5)
     },
     credit() {
-      const hourly = this.paycheckActive.hours * +this.userInfo.wage
-      const overtime =
-        this.paycheckActive.overtime * (+this.userInfo.wage * 1.5)
-      return this.paycheckActive.credit - hourly - overtime
+      const hourly = this.paycheck.hours * +this.userInfo.wage
+      const overtime = this.paycheck.overtime * (+this.userInfo.wage * 1.5)
+      return this.paycheck.credit - hourly - overtime
     }
   }
 }
@@ -104,10 +100,6 @@ export default {
   border: 1px solid darken($accent-color, 20%);
   border-radius: 16px;
   padding: 25px 15px;
-
-  .orange {
-    color: $secondary-color;
-  }
 
   .mt {
     margin-top: 20px;

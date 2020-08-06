@@ -67,7 +67,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logoutWorkday', 'logoutPaycheck', 'logoutUser']),
     click(index) {
       this.modal.showModal = true
 
@@ -82,7 +82,9 @@ export default {
           this.modal.showDelete = true
           break
         case 3:
-          this.logout()
+          this.logoutWorkday()
+          this.logoutPaycheck()
+          this.logoutUser()
           break
         default:
           break

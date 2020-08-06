@@ -16,7 +16,7 @@ const mutations = {
     state.token = token
     state.user = user
   },
-  logout: state => {
+  logout_user: state => {
     state.token = ''
     state.user = {}
   },
@@ -114,8 +114,8 @@ const actions = {
   },
 
   // Logout
-  logout({ commit }) {
-    commit('logout')
+  logoutUser({ commit }) {
+    commit('logout_user')
     localStorage.removeItem('token')
     localStorage.removeItem('email')
     delete axios.defaults.headers.common['Authorization']

@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <NavBar v-show="isLoggedIn" />
-    <transition name="fade" mode="out-in">
-      <router-view />
-    </transition>
+    <router-view />
   </div>
 </template>
 
@@ -16,13 +14,14 @@ export default {
   components: {
     NavBar
   },
-  methods: mapActions(['getUserInfo', 'getPaychecks']),
-  computed: mapGetters(['isLoggedIn', 'userInfo']),
+  methods: mapActions(['getUserInfo', 'getPaychecks', 'getWorkdays']),
+  computed: mapGetters(['isLoggedIn', 'userInfo', 'paycheckActive']),
   async created() {
     const email = localStorage.getItem('email')
     if (this.isLoggedIn) {
       await this.getUserInfo(email)
-      this.getPaychecks(this.userInfo.id)
+      await this.getPaychecks(this.userInfo.id)
+      this.getWorkdays(this.paycheckActive._id)
     }
   }
 }
@@ -84,6 +83,10 @@ button {
   &:hover {
     background-color: #ccc;
   }
+}
+
+.orange {
+  color: $secondary-color;
 }
 
 .container {

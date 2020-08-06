@@ -19,6 +19,10 @@ const mutations = {
     state.paychecks.unshift(newPaycheck)
     state.paycheck = newPaycheck
   },
+  logout_paycheck: state => {
+    state.paychecks = []
+    state.paycheck = {}
+  },
   set_paycheck_error: (state, paycheckError) =>
     (state.paycheckError = paycheckError),
   clear_paycheck_error: state => (state.paycheckError = '')
@@ -77,6 +81,11 @@ const actions = {
       commit('set_paycheck_error', error.response.data.error)
       setTimeout(() => commit('clear_paycheck_error'), 4000)
     }
+  },
+
+  // Logout
+  logoutPaycheck({ commit }) {
+    commit('logout_paycheck')
   }
 }
 

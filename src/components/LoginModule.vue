@@ -55,7 +55,7 @@ export default {
     password: { required }
   },
   methods: {
-    ...mapActions(['login', 'getUserInfo', 'getPaychecks']),
+    ...mapActions(['login', 'getUserInfo', 'getPaychecks', 'getWorkdays']),
     async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -66,12 +66,13 @@ export default {
         if (!this.userError) {
           await this.getUserInfo(this.email)
           await this.getPaychecks(this.userInfo.id)
+          this.getWorkdays(this.paycheckActive._id)
           this.$router.push({ name: 'Home' })
         }
       }
     }
   },
-  computed: mapGetters(['userError', 'userInfo'])
+  computed: mapGetters(['userError', 'userInfo', 'paycheckActive'])
 }
 </script>
 
