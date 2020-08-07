@@ -15,8 +15,8 @@ const mutations = {
     state.activeWorkdays.unshift(newWorkday),
   set_active_workdays: (state, workdays) => (state.activeWorkdays = workdays),
   set_workday_info: (state, workdays) => (state.workdays = workdays),
-  set_workday_error: (state, error) => (state.error = error),
-  clear_workday_error: state => (state.error = ''),
+  set_workday_error: (state, error) => (state.workdayError = error),
+  clear_workday_error: state => (state.workdayError = ''),
   logout_workday: state => {
     state.workdays = []
     state.activeWorkdays = []
@@ -24,12 +24,24 @@ const mutations = {
 }
 
 const actions = {
-  // Get list of workdays
+  // Get list of active workdays
   async getWorkdays({ commit }, id) {
     try {
       const res = await axios.get(`${url}/paycheck/${id}`)
       const data = res.data
       commit('set_active_workdays', data)
+    } catch (error) {
+      commit('set_workday_error', error.response.data.error)
+      setTimeout(() => commit('clear_workday_error'), 4000)
+    }
+  },
+
+  // Get list of workdays
+  async getWorkdayList({ commit }, id) {
+    try {
+      const res = await axios.get(`${url}/paycheck/${id}`)
+      const data = res.data
+      commit('set_workday_info', data)
     } catch (error) {
       commit('set_workday_error', error.response.data.error)
       setTimeout(() => commit('clear_workday_error'), 4000)

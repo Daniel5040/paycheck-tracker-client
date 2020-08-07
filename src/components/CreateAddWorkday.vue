@@ -95,7 +95,12 @@ export default {
     end: { required }
   },
   methods: {
-    ...mapActions(['createWorkday', 'updatePaycheck', 'getPaychecks']),
+    ...mapActions([
+      'createWorkday',
+      'updatePaycheck',
+      'getPaychecks',
+      'getWorkdays'
+    ]),
     async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -116,7 +121,8 @@ export default {
             userId: this.id,
             paycheckId: this.paycheckActive._id
           })
-          this.getPaychecks(this.id)
+          await this.getPaychecks(this.id)
+          this.getWorkdays(this.paycheckActive._id)
           this.$emit('closeModal')
         }
       }

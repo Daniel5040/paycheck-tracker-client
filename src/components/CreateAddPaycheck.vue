@@ -70,7 +70,7 @@ export default {
     end: { required }
   },
   methods: {
-    ...mapActions(['createPaycheck', 'getPaychecks']),
+    ...mapActions(['createPaycheck', 'getPaychecks', 'logoutWorkday']),
     async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -85,6 +85,7 @@ export default {
         setTimeout(() => (this.error = null), 500)
         if (!this.paycheckError) {
           this.getPaychecks(this.id)
+          this.logoutWorkday()
           this.$emit('closeModal')
         }
       }

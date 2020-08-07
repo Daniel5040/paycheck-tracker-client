@@ -55,7 +55,12 @@ export default {
     password: { required }
   },
   methods: {
-    ...mapActions(['login', 'getUserInfo', 'getPaychecks', 'getWorkdays']),
+    ...mapActions([
+      'login',
+      'getUserInfo',
+      'getPaychecks',
+      'getActiveWorkdays'
+    ]),
     async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -66,7 +71,7 @@ export default {
         if (!this.userError) {
           await this.getUserInfo(this.email)
           await this.getPaychecks(this.userInfo.id)
-          this.getWorkdays(this.paycheckActive._id)
+          this.getActiveWorkdays(this.paycheckActive._id)
           this.$router.push({ name: 'Home' })
         }
       }

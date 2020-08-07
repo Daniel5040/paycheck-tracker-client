@@ -25,7 +25,14 @@ const mutations = {
   },
   set_paycheck_error: (state, paycheckError) =>
     (state.paycheckError = paycheckError),
-  clear_paycheck_error: state => (state.paycheckError = '')
+  clear_paycheck_error: state => (state.paycheckError = ''),
+  delete_paycheck: (state, id) => {
+    const index = state.paychecks.findIndex(paycheck => paycheck._id === id)
+    const start = state.paychecks.slice(0, index)
+    const end = state.paychecks.slice(index + 1)
+    state.paychecks = [...start, ...end]
+    if (state.paychecks.length) state.paycheck = state.paychecks[0]
+  }
 }
 
 const actions = {
@@ -77,6 +84,7 @@ const actions = {
   async deletePaycheck({ commit }, id) {
     try {
       await axios.delete(`${url}/delete/${id}`)
+      commit('delete_paycheck', id)
     } catch (error) {
       commit('set_paycheck_error', error.response.data.error)
       setTimeout(() => commit('clear_paycheck_error'), 4000)

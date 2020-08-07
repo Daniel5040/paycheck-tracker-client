@@ -45,6 +45,15 @@ const routes = [
       if (!store.getters.isLoggedIn) next({ name: 'Login' })
       else next()
     }
+  },
+  {
+    path: '/paychecks/detail/:id',
+    name: 'PaycheckDetail',
+    component: () => import('@/views/PaycheckDetail.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters.isLoggedIn) next({ name: 'Login' })
+      else next()
+    }
   }
 ]
 

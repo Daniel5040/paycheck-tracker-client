@@ -19,12 +19,14 @@
         <p class="right">{{ paycheck.days }}</p>
       </div>
       <div class="container-bottom row">
-        <p>Hourly ({{ paycheck.hours }} @ {{ +userInfo.wage | money }})</p>
+        <p>
+          Hourly ({{ paycheck.hours | decimal }} @ {{ +userInfo.wage | money }})
+        </p>
         <p class="right">${{ hourly | money }}</p>
       </div>
       <div class="container-bottom row">
         <p>
-          Overtime ({{ paycheck.overtime }} @
+          Overtime ({{ paycheck.overtime | decimal }} @
           {{ (+userInfo.wage * 1.5) | money }})
         </p>
         <p class="right">${{ overtime | money }}</p>

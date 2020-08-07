@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2 class="orange">Days worked</h2>
     <div class="box" v-for="workday in workdays" :key="workday._id">
       <div class="row">
         <div class="col">
@@ -22,7 +21,10 @@
           <span class="text left">Cash</span>
           <span class="text left">${{ workday.cash | money }}</span>
         </div>
-        <button class="small-btn" @click="deleteBtn(workday._id)">
+        <button
+          class="small-btn"
+          @click="deleteBtn(workday._id, workday.paycheck)"
+        >
           delete
         </button>
       </div>
@@ -31,17 +33,33 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
   name: 'BaseWorkdaysInfo',
   props: ['workdays'],
   methods: {
-    deleteBtn(id) {
+    ...mapActions([
+      'deleteWorkday',
+      'getWorkdays',
+      'updatePaycheck',
+      'getPaychecks'
+    ]),
+    async deleteBtn(id, paycheck) {
       const option = confirm('Are you sure?')
-      if (option) console.log(id)
+      if (option) {
+        await this.deleteWorkday(id)
+        await this.updatePaycheck({
+          userId: this.userInfo.id,
+          paycheckId: paycheck
+        })
+        await this.getPaychecks(this.userInfo.id)
+        this.$emit('deleteDay')
+      }
     }
   },
+  computed: mapGetters(['userInfo']),
   filters: {
     day(date) {
       return moment(date).format('MMM Do')
