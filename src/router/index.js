@@ -54,6 +54,11 @@ const routes = [
       if (!store.getters.isLoggedIn) next({ name: 'Login' })
       else next()
     }
+  },
+  // catch all 404
+  {
+    path: '*',
+    component: () => import('@/views/NotFound.vue')
   }
 ]
 
