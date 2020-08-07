@@ -33,7 +33,8 @@ export default {
   },
   filters: {
     possession(name) {
-      return name.slice(-1) === 's' ? `${name}'` : `${name}'s`
+      if (name !== undefined)
+        return name.slice(-1) === 's' ? `${name}'` : `${name}'s`
     }
   },
   methods: {
@@ -44,7 +45,8 @@ export default {
   },
   computed: mapGetters(['userInfo', 'paycheckActive', 'workdayActive']),
   created() {
-    this.getWorkdays(this.paycheckActive._id)
+    if (this.paycheckActive !== undefined)
+      this.getWorkdays(this.paycheckActive._id)
   }
 }
 </script>

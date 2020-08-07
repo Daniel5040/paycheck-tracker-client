@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="back">
+      <span @click="back" class="material-icons orange">arrow_back</span>
+    </div>
     <BasePaycheckInfo :paycheck="paycheck">
       <h2 class="title orange">Your latest paycheck</h2>
     </BasePaycheckInfo>
@@ -31,6 +34,9 @@ export default {
       const id = this.$route.params.id
       this.getWorkdayList(id)
       this.paycheck = this.paycheckList.find(element => element._id === id)
+    },
+    back() {
+      this.$router.push({ name: 'Paychecks' })
     }
   },
   computed: mapGetters(['workdayList', 'paycheckList']),
@@ -45,5 +51,15 @@ export default {
 <style lang="scss" scoped>
 .container {
   margin-top: 0;
+}
+.back {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px;
+  margin-bottom: -25px;
+
+  .material-icons {
+    font-size: 40px;
+  }
 }
 </style>

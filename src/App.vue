@@ -21,7 +21,8 @@ export default {
     if (this.isLoggedIn) {
       await this.getUserInfo(email)
       await this.getPaychecks(this.userInfo.id)
-      this.getWorkdays(this.paycheckActive._id)
+      if (this.paycheckActive !== undefined)
+        this.getWorkdays(this.paycheckActive._id)
     }
   }
 }
