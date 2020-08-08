@@ -39,6 +39,10 @@
         <p>Cash tips</p>
         <p class="right">${{ paycheck.cash | money }}</p>
       </div>
+      <div class="container-bottom row">
+        <p>Credit + Hourly</p>
+        <p class="right">${{ paycheck.credit | money }}</p>
+      </div>
     </div>
     <p class="mt">
       Pay Period: {{ paycheck.start | formatDate }} -

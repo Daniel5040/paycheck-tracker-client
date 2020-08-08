@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '@/router'
 
-const url = 'http://localhost:5000/api/user'
+const url = 'https://paycheck-tracker.herokuapp.com/api/user'
 const token = localStorage.getItem('token')
 if (token) axios.defaults.headers.common['Authorization'] = token
 

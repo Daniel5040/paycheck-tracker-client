@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = 'http://localhost:5000/api/workday'
+const url = 'https://paycheck-tracker.herokuapp.com/api/workday'
 const token = localStorage.getItem('token')
 if (token) axios.defaults.headers.common['Authorization'] = token
 
