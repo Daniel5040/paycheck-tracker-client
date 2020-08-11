@@ -9,6 +9,8 @@
       :input-style="input"
       @blur="$v.start.$touch()"
       :class="{ 'input-error': $v.start.$error, date: $v.start.$error }"
+      zone="local"
+      value-zone="local"
     ></datetime>
     <div class="error" v-if="$v.start.$error && start">
       <span v-if="!$v.start.required">Field is required</span>
@@ -20,6 +22,8 @@
       :input-style="input"
       @blur="$v.end.$touch()"
       :class="{ 'input-error': $v.end.$error, date: $v.end.$error }"
+      zone="local"
+      value-zone="local"
     ></datetime>
     <div class="error" v-if="$v.end.$error && end">
       <span v-if="!$v.end.required">Field is required</span>

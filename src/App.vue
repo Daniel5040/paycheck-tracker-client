@@ -106,6 +106,7 @@ button {
   flex-direction: column;
   padding: 30px 50px;
   width: 75%;
+  max-width: 400px;
 }
 
 .cards {
