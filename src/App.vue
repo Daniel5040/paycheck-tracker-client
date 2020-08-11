@@ -218,6 +218,8 @@ button {
   .container {
     width: 33%;
     min-width: 768px;
+    margin-right: 0;
+    margin-left: 0;
   }
 }
 
