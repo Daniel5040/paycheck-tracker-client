@@ -203,6 +203,23 @@ button {
   background: $secondary-color !important;
 }
 
+@media only screen and (min-width: 1080px) {
+  #app {
+    display: flex;
+    justify-content: center;
+  }
+
+  body {
+    margin: 0;
+    margin-top: 55px;
+  }
+
+  .container {
+    width: 33%;
+    min-width: 768px;
+  }
+}
+
 // Transitions
 .down-enter-active {
   -moz-transition-duration: 0.3s;

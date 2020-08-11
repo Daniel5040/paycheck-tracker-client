@@ -76,4 +76,13 @@ export default {
 .material-icons.md-40 {
   font-size: 40px;
 }
+
+@media only screen and (min-width: 1080px) {
+  .nav {
+    bottom: auto;
+    top: 0;
+    border: 0;
+    border-bottom: 1px solid darken($accent-color, 20%);
+  }
+}
 </style>
