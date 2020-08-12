@@ -44,16 +44,25 @@ export default {
     email: { required, email }
   },
   methods: {
-    ...mapActions(['deleteAccount']),
+    ...mapActions([
+      'deleteAccount',
+      'logoutWorkday',
+      'logoutPaycheck',
+      'logoutUser'
+    ]),
     async submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         this.error = 'Please fill out the form correctly.'
+      } else if (this.email !== localStorage.getItem('email')) {
+        this.error = 'Please Enter your email'
       } else {
         await this.deleteAccount(this.id)
         setTimeout(() => (this.error = null), 500)
         if (!this.userError) {
-          this.$emit('closeModal')
+          this.logoutWorkday()
+          this.logoutPaycheck()
+          this.logoutUser()
         }
       }
     }

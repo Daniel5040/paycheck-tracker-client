@@ -22,9 +22,10 @@
     </div>
     <input
       class="input"
-      type="text"
+      type="number"
+      step=".01"
       v-model.trim="$v.user.wage.$model"
-      placeholder="Wage"
+      placeholder="Wage (hourly)"
       @blur="$v.user.wage.$touch()"
       :class="{ 'input-error': $v.user.wage.$error }"
     />

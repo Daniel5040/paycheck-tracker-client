@@ -41,6 +41,17 @@ export default {
   font-family: Roboto, sans-serif;
 }
 
+body {
+  // Safari, Chrome, Opera
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  // IE, Edge, Firefox
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 h1,
 h2,
 h3,
@@ -54,6 +65,20 @@ button {
 body {
   margin-bottom: 55px;
   background: $primary-color;
+}
+
+input {
+  // Chrome, Safari, Edge, Opera
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  // Firefox
+  &[type='number'] {
+    -moz-appearance: textfield;
+  }
 }
 
 button {

@@ -48,9 +48,10 @@
     </div>
     <input
       class="input"
-      type="text"
+      type="number"
+      step=".01"
       v-model.trim="$v.wage.$model"
-      placeholder="Wage"
+      placeholder="Wage (hourly)"
       @blur="$v.wage.$touch()"
       :class="{ 'input-error': $v.wage.$error }"
     />
@@ -81,7 +82,7 @@ export default {
       name: '',
       email: '',
       password: '',
-      wage: '',
+      wage: null,
       error: null
     }
   },
@@ -102,7 +103,7 @@ export default {
           name: this.name,
           email: this.email,
           password: this.password,
-          wage: this.wage ? +this.wage : null
+          wage: this.wage
         }
         await this.register(user)
         setTimeout(() => (this.error = null), 500)

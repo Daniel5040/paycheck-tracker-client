@@ -24,7 +24,7 @@
     </span>
     <div v-else class="m10">
       <span class="orange">
-        Double tap a paycheck to see detailed information
+        Double click or tap a paycheck to see detailed information
       </span>
       <PaycheckList
         v-for="paycheck in paychecks"

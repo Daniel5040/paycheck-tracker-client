@@ -57,6 +57,7 @@ export default {
   justify-content: flex-start;
   margin-top: 10px;
   margin-bottom: -25px;
+  cursor: pointer;
 
   .material-icons {
     font-size: 40px;
