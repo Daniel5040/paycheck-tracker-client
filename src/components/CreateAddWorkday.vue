@@ -34,14 +34,16 @@
       <div v-show="showTips">
         <input
           class="input"
+          type="number"
+          step=".01"
           placeholder="Credit Total"
-          type="text"
           v-model.trim="credit"
         />
         <input
           class="input"
+          type="number"
+          step=".01"
           placeholder="Cash Total"
-          type="text"
           v-model.trim="cash"
         />
       </div>
@@ -77,8 +79,8 @@ export default {
     return {
       start: '',
       end: '',
-      credit: '',
-      cash: '',
+      credit: null,
+      cash: null,
       error: null,
       showTips: false,
       input: {
